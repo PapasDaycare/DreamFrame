@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DreamFrame - Bring Photos to Life</title>
+  <style>
+    /* --- DreamBot Specific CSS --- */
+    #dreambot-toggle-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        padding: 15px 25px;
+        border-radius: 50px;
+        font-size: 1.1em;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        background-color: #38bdf8;
+        color: #0f172a;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    #dreambot-toggle-button:hover {
+        transform: scale(1.06);
+        background-color: #0ea5e9;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        opacity: 0;
+        animation: fadeIn 1.5s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* START: Styles for the DreamBot Chat Window */
+    #dreambot {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 250px;
+        background: #fff;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        color: #000;
+        display: none; /* This hides it initially */
+        z-index: 999;  /* This puts it above other content */
+    }
+    /* END: Styles for the DreamBot Chat Window */
+
+    /* The rest of your correctly defined styles should go here */
+    header {
+      background: linear-gradient(90deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 40px 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.8em;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin: 10px 0 0;
+      font-size: 1.2em;
+    }
+
+    section {
+      margin: 50px auto;
+      padding: 20px;
+      max-width: 700px;
+      background-color: #1e293b;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      color: #38bdf8;
+      font-size: 1.8em;
+    }
+
+    p {
+      font-size: 1.1em;
+      line-height: 1.6em;
+      color: #cbd5e1;
+    }
+
+    button {
+      padding: 14px 32px;
+      font-size: 18px;
+      background-color: #38bdf8;
+      color: #0f172a;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      transform: scale(1.06);
+      background-color: #0ea5e9;
+    }
+
+    /* Additional DreamBot internal styles (from earlier suggestion) */
+    #bot-convo {
+      height: 250px;
+      overflow-y: auto;
+      background: #f9f9f9;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    #userInput {
+      width: 100%;
+      margin-bottom: 0.5rem;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    #dreambot button {
+        width: calc(50% - 0.25rem);
+        padding: 8px 12px;
+        font-size: 0.9em;
+        margin-top: 5px;
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    #dreambot button:last-of-type {
+        margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DreamFrame</h1>
+    <p>Turn your favorite photo into a 5-second memory.</p>
+  </header>
+
+  <section>
+    <h2>Custom Stories</h2>
+    <p>Custom stories, visuals, and videos tailored to your vision.</p>
+  </section>
+
+  <section>
+    <h2>MemorySpark</h2>
+    <p>Spark a memory. Bring a moment to life.</p>
+    <p>Turn a single photo into a vivid, 5-second video — complete with natural movement and lifelike animation. MemorySpark transforms still moments into heartwarming memories that move.</p>
+    <a href="#"><button>Try MemorySpark →</button></a>
+  </section>
+
+  <button id="dreambot-toggle-button" onclick="toggleDreamBot()">
+    Chat with DreamBot 🎤
+  </button>
+
+  <div id="dreambot">
+    <p><strong>DreamBot 🎤</strong></p>
+    <div id="bot-convo"></div>
+    <input type="text" id="userInput" placeholder="Ask DreamBot..." >
+    <button onclick="talkToDreamBot()">Send</button>
+    <button onclick="startListening()">🎙️ Speak</button>
+  </div>
+
+<script>
+let apiKey = 'AIzaSyAknLwYi32CQZsI4y0K-29cGHqCxyXoj00'; // Your Google Gemini API key
+
+// Function to toggle DreamBot visibility
+function toggleDreamBot() {
+  const dreambot = document.getElementById('dreambot');
+  const toggleButton = document.getElementById('dreambot-toggle-button');
+
+  if (dreambot.style.display === 'none' || dreambot.style.display === '') {
+    dreambot.style.display = 'block'; // Show DreamBot
+    toggleButton.style.display = 'none'; // Hide the toggle button
+  } else {
+    dreambot.style.display = 'none'; // Hide DreamBot
+    toggleButton.style.display = 'block'; // Show the toggle button
+  }
+}
+
+async function talkToDreamBot() {
+  const input = document.getElementById("userInput").value;
+  const convo = document.getElementById("bot-convo");
+  if (input.trim() === "") return; // Prevent sending empty messages
+
+  convo.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
+  document.getElementById("userInput").value = "";
+
+  // Add a simple loading indicator
+  const loadingIndicator = document.createElement('p');
+  loadingIndicator.id = 'loading-indicator';
+  loadingIndicator.innerHTML = '<em>DreamBot is typing...</em>';
+  convo.appendChild(loadingIndicator);
+  convo.scrollTop = convo.scrollHeight;
+
+  try {
+    // --- Google Gemini API specific changes ---
+    const GOOGLE_API_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`; // Correct Gemini endpoint
+
+    const response = await fetch(GOOGLE_API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json" // No Authorization header for Gemini API Key in URL
+      },
+      body: JSON.stringify({
+        // Gemini API message format
+        contents: [{
+          parts: [{
+            text: input
+          }]
+        }]
+      })
+    });
+
+    if (!response.ok) {
+        // More detailed error handling for Gemini API
+        const errorData = await response.json();
+        console.error("Gemini API Error Response:", errorData);
+        throw new Error(`HTTP error! status: ${response.status} - ${errorData.error.message || 'Unknown error'}`);
+    }
+
+    const data = await response.json();
+    // Gemini API response parsing (expect content.parts[0].text)
+    const reply = data.candidates[0].content.parts[0].text;
+
+    if (loadingIndicator.parentNode) {
+        convo.removeChild(loadingIndicator);
+    }
+    convo.innerHTML += `<p><strong>DreamBot:</strong> ${reply}</p>`;
+    convo.scrollTop = convo.scrollHeight;
+    speak(reply);
+  } catch (error) {
+    console.error("Error communicating with Google Gemini AI:", error);
+    if (loadingIndicator.parentNode) {
+        convo.removeChild(loadingIndicator);
+    }
+    convo.innerHTML += `<p style="color: red;"><strong>DreamBot Error:</strong> Could not get a response. Please try again later. (Check console for details)</p>`;
+    convo.scrollTop = convo.scrollHeight;
+  }
+}
+
+function speak(text) {
+  const msg = new SpeechSynthesisUtterance(text);
+  msg.voice = speechSynthesis.getVoices().find(v => v.lang === 'en-US') || null;
+  msg.rate = 1;
+  speechSynthesis.speak(msg);
+}
+
+function startListening() {
+  // Check for Web Speech API support
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    alert("Sorry, your browser doesn't support Speech Recognition.");
+    return;
+  }
+
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  const userInput = document.getElementById("userInput");
+  userInput.placeholder = "Listening..."; // Indicate listening state
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    userInput.value = transcript;
+    userInput.placeholder = "Ask DreamBot..."; // Reset placeholder
+    talkToDreamBot();
+  };
+
+  recognition.onerror = function(event) {
+    console.error("Speech recognition error:", event.error);
+    userInput.placeholder = "Ask DreamBot..."; // Reset placeholder on error
+    alert("Speech recognition error: " + event.error + ". Please ensure your microphone is enabled and not in use by another application.");
+  };
+
+  recognition.onend = function() {
+    userInput.placeholder = "Ask DreamBot..."; // Reset placeholder when listening ends;
+  };
+}
+</script>
+</body>
+</html>
