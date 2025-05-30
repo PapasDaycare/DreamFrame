@@ -1,36 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DreamFrame</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DreamFrame - Bring Photos to Life</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 2s ease-in forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    header {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 20px 0;
+    }
+
+    section {
+      margin: 40px auto;
+      padding: 20px;
+      max-width: 600px;
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 18px;
+      background-color: #f97316;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background-color: #ea580c;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>Welcome to DreamFrame</h1>
-    <!-- MemorySpark Feature -->
-<section style="margin-top: 60px; text-align: center;">
-  <h2 style="font-size: 32px; color: #F97316;">MemorySpark</h2>
-<p style="color: #ff6a00;">Spark a memory. Bring a moment to life.</p>
-  </p>
-  <p style="margin: 20px auto; max-width: 500px;">
-    Turn a single photo into a vivid, 5-second video — complete with natural movement and lifelike animation.
-    MemorySpark transforms still moments into heartwarming memories that move.
-  </p>
-  <a href="/memoryspark-demo">
-    <button style="padding: 14px 28px; font-size: 18px; background-color: #F97316; color: white; border: none; border-radius: 6px;">
-      Try MemorySpark →
-    </button>
-  </a>
-</section>
-     <p>Custom stories, visuals, and videos tailored to your vision.</p>
+    <p>Turn your favorite photo into a 5-second memory.</p>
   </header>
-  <main>
-    <p>Start creating today!</p>
-  </main>
-  <footer>
-    <p>&copy; 2025 DreamFrame. All rights reserved.</p>
-  </footer>
+
+  <section>
+    <h2 style="color: #f97316;">Custom Stories</h2>
+    <p style="font-size: 18px;">Custom stories, visuals, and videos tailored to your vision.</p>
+  </section>
+
+  <section>
+    <h2 style="color: #f97316;">MemorySpark</h2>
+    <p>Spark a memory. Bring a moment to life.</p>
+    <p>Turn a single photo into a vivid, 5-second video — complete with natural movement and lifelike animation. MemorySpark transforms still moments into heartwarming memories that move.</p>
+    <a href="#"><button>Try MemorySpark →</button></a>
+  </section>
 </body>
 </html>
