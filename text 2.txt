@@ -1,5 +1,7 @@
-<section id="hero">
-  <h2>Bring Your Imagination to Life</h2>
-  <p>Custom stories, visuals, and videos tailored to your vision.</p>
-  <button onclick="location.href='#shop'">Browse Content</button>
-</section>
+<div id="dreambot" style="position: fixed; bottom: 20px; right: 20px; width: 320px; background: #fff; border: 2px solid #ccc; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+  <p><strong>DreamBot 🎙️</strong></p>
+  <div id="bot-convo" style="height: 150px; overflow-y: auto; background: #f9f9f9; padding: 0.5rem; border-radius: 8px; margin-bottom: 0.5rem;"></div>
+  <input type="text" id="userInput" placeholder="Ask DreamBot..." style="width: 100%; margin-bottom: 0.5rem;">
+  <button onclick="talkToDreamBot()">Send</button>
+  <button onclick="startListening()" style="margin-left: 0.5rem;">🎤 Speak</button>
+</div>
